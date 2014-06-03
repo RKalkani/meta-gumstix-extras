@@ -17,6 +17,7 @@ LICENSE_FLAGS_WHITELIST = "commercial"
 PREFERRED_PROVIDER_jpeg = "jpeg"
 PREFERRED_PROVIDER_jpeg-native = "jpeg-native"
 PREFERRED_PROVIDER_sshd = "openssh"
+PREFERRED_PROVIDER_libgles-omap3 = "libgles-omap3"
 
 # Use Gumstix source mirror as default premirror
 SOURCE_MIRROR_URL ?= "http://source-cache.gumstix.org/"
