@@ -1,0 +1,57 @@
+From b2e05f3cb6945315c15c3c211c28ee2889df9f80 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 5 Jun 2014 10:38:53 -0700
+Subject: [PATCH 14/14] Make reset conditional on CONFIG_ not kernel version
+
+Given that we're building kernel modules, it seems reasonable to
+conditionally use features based on their presence rather than their
+assumed presence based on a particular kernel version.  In this case,
+CONFIG_RESET_TI (or possibly CONFIG_RESET_CONTROLLER going forward)
+directly indicates support for the PRCM reset architecture rather than
+ relying on it to be magically present for all kernels of version
+3.11+.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/srvkm/env/linux/module.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/services4/srvkm/env/linux/module.c b/services4/srvkm/env/linux/module.c
+index f271479..e35213c 100644
+--- a/services4/srvkm/env/linux/module.c
++++ b/services4/srvkm/env/linux/module.c
+@@ -343,7 +343,7 @@ static LDM_DRV powervr_driver = {
+ 
+ LDM_DEV *gpsPVRLDMDev;
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if defined(CONFIG_RESET_TI)
+ struct reset_control *rstc;
+ bool already_deasserted = false;
+ #endif
+@@ -388,11 +388,11 @@ static int __devinit PVRSRVDriverProbe(LDM_DEV *pDevice, const struct pci_device
+ #endif
+ {
+ 	SYS_DATA *psSysData;
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if defined(CONFIG_RESET_TI)
+ 	int ret;	
+ #endif
+ 	PVR_TRACE(("PVRSRVDriverProbe(pDevice=%p)", pDevice));
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if defined(CONFIG_RESET_TI)
+ 	rstc = reset_control_get(&pDevice->dev, NULL);
+ 
+ 	if (IS_ERR(rstc)) 
+@@ -446,7 +446,7 @@ static int __devinit PVRSRVDriverProbe(LDM_DEV *pDevice, const struct pci_device
+ 			return -ENODEV;
+ 		}
+ 	}
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if defined(CONFIG_RESET_TI)
+         if (!already_deasserted)
+         {
+                 ret = reset_control_is_reset(rstc);
+-- 
+1.8.3.2
+

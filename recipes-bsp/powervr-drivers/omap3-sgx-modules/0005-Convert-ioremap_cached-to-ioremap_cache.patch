@@ -1,0 +1,37 @@
+From a8862a5555b08e8f4a80db97ecaa95c3a36a0ba6 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 2 Jun 2014 16:18:39 -0700
+Subject: [PATCH 05/14] Convert ioremap_cached to ioremap_cache
+
+As of the 3.13 kernel, [1] is applied which renames the
+'ioremap_cached' function to 'ioremap_cache' for ARM.
+
+The same change likely applies for i386.
+
+[1] http://www.spinics.net/lists/arm-kernel/msg285252.html
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/srvkm/env/linux/mutils.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/services4/srvkm/env/linux/mutils.h b/services4/srvkm/env/linux/mutils.h
+index 31e0dac..90ec41c 100644
+--- a/services4/srvkm/env/linux/mutils.h
++++ b/services4/srvkm/env/linux/mutils.h
+@@ -79,7 +79,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ 	#define	IOREMAP(pa, bytes)	ioremap_cache(pa, bytes)
+ #else	
+ 	#if defined(__arm__) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0))
+-		#define	IOREMAP(pa, bytes)	ioremap_cached(pa, bytes)
++		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,13,0))
++			#define	IOREMAP(pa, bytes)	ioremap_cache(pa, bytes)
++		#else
++			#define	IOREMAP(pa, bytes)	ioremap_cached(pa, bytes)
++		#endif
+ 	#else
+ 		#define IOREMAP(pa, bytes)	ioremap(pa, bytes)
+ 	#endif
+-- 
+1.8.3.2
+

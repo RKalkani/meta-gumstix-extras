@@ -1,0 +1,402 @@
+From 4c286cb9864d2a8a1c0e82a437577d9fbe2f2017 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 4 Jun 2014 17:32:04 -0700
+Subject: [PATCH 01/14] Cleanup permissions and compilation detritus
+
+---
+ .gitignore                                         | 27 ++++++++++
+ Kbuild                                             |  0
+ Makefile                                           |  0
+ services4/3rdparty/bufferclass_ti/Kbuild           |  0
+ services4/3rdparty/bufferclass_ti/Makefile         |  0
+ services4/3rdparty/bufferclass_ti/bc_cat.c         |  0
+ services4/3rdparty/bufferclass_ti/bc_cat.h         |  0
+ .../3rdparty/bufferclass_ti/bufferclass_ti.mod.c   | 49 ------------------
+ services4/3rdparty/dc_omapfb3_linux/Kbuild         |  0
+ services4/3rdparty/dc_ti335x_linux/Kbuild          |  0
+ .../dc_ti43xx_linux/3rdparty_dc_drm_shared.h       |  0
+ services4/3rdparty/dc_ti43xx_linux/Kbuild          |  0
+ services4/3rdparty/dc_ti43xx_linux/Kbuild.mk       |  0
+ services4/3rdparty/dc_ti43xx_linux/Linux.mk        |  0
+ services4/3rdparty/dc_ti43xx_linux/modules.order   |  1 -
+ services4/3rdparty/dc_ti43xx_linux/omaplfb.h       |  0
+ services4/3rdparty/dc_ti43xx_linux/omaplfb.mod.c   | 60 ----------------------
+ .../dc_ti43xx_linux/omaplfb_displayclass.c         |  0
+ services4/3rdparty/dc_ti43xx_linux/omaplfb_linux.c |  0
+ services4/3rdparty/dc_ti81xx_linux/Kbuild          |  0
+ services4/3rdparty/dc_ti81xx_linux/omaplfb.mod.c   | 59 ---------------------
+ services4/3rdparty/linux_drm/Kbuild                |  0
+ services4/system/ti43xx/oemfuncs.h                 |  0
+ services4/system/ti43xx/sysconfig.c                |  0
+ services4/system/ti43xx/sysconfig.h                |  0
+ services4/system/ti43xx/sysinfo.h                  |  0
+ services4/system/ti43xx/syslocal.h                 |  0
+ services4/system/ti43xx/sysutils.c                 |  0
+ services4/system/ti43xx/sysutils_linux.c           |  0
+ services4/system/ti81xx/oemfuncs.h                 |  0
+ services4/system/ti81xx/sysconfig.c                |  0
+ services4/system/ti81xx/sysconfig.h                |  0
+ services4/system/ti81xx/sysinfo.h                  |  0
+ services4/system/ti81xx/syslocal.h                 |  0
+ services4/system/ti81xx/sysutils.c                 |  0
+ services4/system/ti81xx/sysutils_linux.c           |  0
+ 36 files changed, 27 insertions(+), 169 deletions(-)
+ create mode 100644 .gitignore
+ mode change 100755 => 100644 Kbuild
+ mode change 100755 => 100644 Makefile
+ mode change 100755 => 100644 services4/3rdparty/bufferclass_ti/Kbuild
+ mode change 100755 => 100644 services4/3rdparty/bufferclass_ti/Makefile
+ mode change 100755 => 100644 services4/3rdparty/bufferclass_ti/bc_cat.c
+ mode change 100755 => 100644 services4/3rdparty/bufferclass_ti/bc_cat.h
+ delete mode 100755 services4/3rdparty/bufferclass_ti/bufferclass_ti.mod.c
+ mode change 100755 => 100644 services4/3rdparty/dc_omapfb3_linux/Kbuild
+ mode change 100755 => 100644 services4/3rdparty/dc_ti335x_linux/Kbuild
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/3rdparty_dc_drm_shared.h
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/Kbuild
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/Kbuild.mk
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/Linux.mk
+ delete mode 100755 services4/3rdparty/dc_ti43xx_linux/modules.order
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/omaplfb.h
+ delete mode 100755 services4/3rdparty/dc_ti43xx_linux/omaplfb.mod.c
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/omaplfb_displayclass.c
+ mode change 100755 => 100644 services4/3rdparty/dc_ti43xx_linux/omaplfb_linux.c
+ mode change 100755 => 100644 services4/3rdparty/dc_ti81xx_linux/Kbuild
+ delete mode 100644 services4/3rdparty/dc_ti81xx_linux/omaplfb.mod.c
+ mode change 100755 => 100644 services4/3rdparty/linux_drm/Kbuild
+ mode change 100755 => 100644 services4/system/ti43xx/oemfuncs.h
+ mode change 100755 => 100644 services4/system/ti43xx/sysconfig.c
+ mode change 100755 => 100644 services4/system/ti43xx/sysconfig.h
+ mode change 100755 => 100644 services4/system/ti43xx/sysinfo.h
+ mode change 100755 => 100644 services4/system/ti43xx/syslocal.h
+ mode change 100755 => 100644 services4/system/ti43xx/sysutils.c
+ mode change 100755 => 100644 services4/system/ti43xx/sysutils_linux.c
+ mode change 100755 => 100644 services4/system/ti81xx/oemfuncs.h
+ mode change 100755 => 100644 services4/system/ti81xx/sysconfig.c
+ mode change 100755 => 100644 services4/system/ti81xx/sysconfig.h
+ mode change 100755 => 100644 services4/system/ti81xx/sysinfo.h
+ mode change 100755 => 100644 services4/system/ti81xx/syslocal.h
+ mode change 100755 => 100644 services4/system/ti81xx/sysutils.c
+ mode change 100755 => 100644 services4/system/ti81xx/sysutils_linux.c
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..48339d4
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,27 @@
++Module.symvers
++.*
++*.o
++*.o.*
++*.a
++*.s
++*.ko
++*.so
++*.so.dbg
++*.mod.c
++*.i
++*.lst
++*.symtypes
++*.order
++modules.builtin
++*.elf
++*.bin
++*.gz
++*.bz2
++*.lzma
++*.xz
++*.lz4
++*.lzo
++*.patch
++*.gcno
++!.gitignore
++
+diff --git a/Kbuild b/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/Makefile b/Makefile
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/bufferclass_ti/Kbuild b/services4/3rdparty/bufferclass_ti/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/bufferclass_ti/Makefile b/services4/3rdparty/bufferclass_ti/Makefile
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/bufferclass_ti/bc_cat.c b/services4/3rdparty/bufferclass_ti/bc_cat.c
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/bufferclass_ti/bc_cat.h b/services4/3rdparty/bufferclass_ti/bc_cat.h
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/bufferclass_ti/bufferclass_ti.mod.c b/services4/3rdparty/bufferclass_ti/bufferclass_ti.mod.c
+deleted file mode 100755
+index c387ba9..0000000
+--- a/services4/3rdparty/bufferclass_ti/bufferclass_ti.mod.c
++++ /dev/null
+@@ -1,49 +0,0 @@
+-#include <linux/module.h>
+-#include <linux/vermagic.h>
+-#include <linux/compiler.h>
+-
+-MODULE_INFO(vermagic, VERMAGIC_STRING);
+-
+-struct module __this_module
+-__attribute__((section(".gnu.linkonce.this_module"))) = {
+- .name = KBUILD_MODNAME,
+- .init = init_module,
+-#ifdef CONFIG_MODULE_UNLOAD
+- .exit = cleanup_module,
+-#endif
+- .arch = MODULE_ARCH_INIT,
+-};
+-
+-static const struct modversion_info ____versions[]
+-__used
+-__attribute__((section("__versions"))) = {
+-	{ 0x372d36bb, "module_layout" },
+-	{ 0x6bc3fbc0, "__unregister_chrdev" },
+-	{ 0x12da5bb2, "__kmalloc" },
+-	{ 0xff178f6, "__aeabi_idivmod" },
+-	{ 0xfbc74f64, "__copy_from_user" },
+-	{ 0xcfad398d, "device_destroy" },
+-	{ 0x46ea0122, "__register_chrdev" },
+-	{ 0x62b72b0d, "mutex_unlock" },
+-	{ 0xfa2a45e, "__memzero" },
+-	{ 0x27e1a049, "printk" },
+-	{ 0x328a05f1, "strncpy" },
+-	{ 0xd69d5047, "dma_free_coherent" },
+-	{ 0xe16b893b, "mutex_lock" },
+-	{ 0xdc1e1b7d, "device_create" },
+-	{ 0xa2ef561a, "dma_alloc_coherent" },
+-	{ 0xe328af64, "PVRGetBufferClassJTable" },
+-	{ 0x37a0cba, "kfree" },
+-	{ 0xf6012f5a, "remap_pfn_range" },
+-	{ 0x9d669763, "memcpy" },
+-	{ 0xc7ef0ce2, "class_destroy" },
+-	{ 0x4c1d0cd4, "__class_create" },
+-};
+-
+-static const char __module_depends[]
+-__used
+-__attribute__((section(".modinfo"))) =
+-"depends=pvrsrvkm";
+-
+-
+-MODULE_INFO(srcversion, "34D71BE8F97CAF02B6B0A3B");
+diff --git a/services4/3rdparty/dc_omapfb3_linux/Kbuild b/services4/3rdparty/dc_omapfb3_linux/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti335x_linux/Kbuild b/services4/3rdparty/dc_ti335x_linux/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/3rdparty_dc_drm_shared.h b/services4/3rdparty/dc_ti43xx_linux/3rdparty_dc_drm_shared.h
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Kbuild b/services4/3rdparty/dc_ti43xx_linux/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk b/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Linux.mk b/services4/3rdparty/dc_ti43xx_linux/Linux.mk
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/modules.order b/services4/3rdparty/dc_ti43xx_linux/modules.order
+deleted file mode 100755
+index 7112b66..0000000
+--- a/services4/3rdparty/dc_ti43xx_linux/modules.order
++++ /dev/null
+@@ -1 +0,0 @@
+-kernel//home1/prathap/aegis_presi/gfxsdk/Graphics_SDK_5_00_00_01/GFX_Linux_KM/services4/3rdparty/dc_ti43xx_linux/omaplfb.ko
+diff --git a/services4/3rdparty/dc_ti43xx_linux/omaplfb.h b/services4/3rdparty/dc_ti43xx_linux/omaplfb.h
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/omaplfb.mod.c b/services4/3rdparty/dc_ti43xx_linux/omaplfb.mod.c
+deleted file mode 100755
+index 443439a..0000000
+--- a/services4/3rdparty/dc_ti43xx_linux/omaplfb.mod.c
++++ /dev/null
+@@ -1,60 +0,0 @@
+-#include <linux/module.h>
+-#include <linux/vermagic.h>
+-#include <linux/compiler.h>
+-
+-MODULE_INFO(vermagic, VERMAGIC_STRING);
+-
+-struct module __this_module
+-__attribute__((section(".gnu.linkonce.this_module"))) = {
+-	.name = KBUILD_MODNAME,
+-	.init = init_module,
+-#ifdef CONFIG_MODULE_UNLOAD
+-	.exit = cleanup_module,
+-#endif
+-	.arch = MODULE_ARCH_INIT,
+-};
+-
+-static const struct modversion_info ____versions[]
+-__used
+-__attribute__((section("__versions"))) = {
+-	{ 0x2374bad8, __VMLINUX_SYMBOL_STR(module_layout) },
+-	{ 0x12da5bb2, __VMLINUX_SYMBOL_STR(__kmalloc) },
+-	{ 0x539a5b03, __VMLINUX_SYMBOL_STR(mutex_destroy) },
+-	{ 0x2e5810c6, __VMLINUX_SYMBOL_STR(__aeabi_unwind_cpp_pr1) },
+-	{ 0x80d68d3e, __VMLINUX_SYMBOL_STR(fb_register_client) },
+-	{ 0x71b629b8, __VMLINUX_SYMBOL_STR(__alloc_workqueue_key) },
+-	{ 0x3cdf8fe, __VMLINUX_SYMBOL_STR(fb_pan_display) },
+-	{ 0xf7802486, __VMLINUX_SYMBOL_STR(__aeabi_uidivmod) },
+-	{ 0x7344cc7c, __VMLINUX_SYMBOL_STR(mutex_unlock) },
+-	{ 0x785136c, __VMLINUX_SYMBOL_STR(PVRGetDisplayClassJTable) },
+-	{ 0xe2d5255a, __VMLINUX_SYMBOL_STR(strcmp) },
+-	{ 0xc631580a, __VMLINUX_SYMBOL_STR(console_unlock) },
+-	{ 0xe707d823, __VMLINUX_SYMBOL_STR(__aeabi_uidiv) },
+-	{ 0xfa2a45e, __VMLINUX_SYMBOL_STR(__memzero) },
+-	{ 0x271f2ced, __VMLINUX_SYMBOL_STR(__mutex_init) },
+-	{ 0x27e1a049, __VMLINUX_SYMBOL_STR(printk) },
+-	{ 0x328a05f1, __VMLINUX_SYMBOL_STR(strncpy) },
+-	{ 0xfbaaf01e, __VMLINUX_SYMBOL_STR(console_lock) },
+-	{ 0x16305289, __VMLINUX_SYMBOL_STR(warn_slowpath_null) },
+-	{ 0x8c03d20c, __VMLINUX_SYMBOL_STR(destroy_workqueue) },
+-	{ 0x1c3977be, __VMLINUX_SYMBOL_STR(module_put) },
+-	{ 0xb8ff4713, __VMLINUX_SYMBOL_STR(registered_fb) },
+-	{ 0x83fb9d7e, __VMLINUX_SYMBOL_STR(fb_set_var) },
+-	{ 0x9be9d0b2, __VMLINUX_SYMBOL_STR(mutex_lock_nested) },
+-	{ 0x37a0cba, __VMLINUX_SYMBOL_STR(kfree) },
+-	{ 0x9d669763, __VMLINUX_SYMBOL_STR(memcpy) },
+-	{ 0x89c0ed7c, __VMLINUX_SYMBOL_STR(lockdep_init_map) },
+-	{ 0xb12cbacb, __VMLINUX_SYMBOL_STR(fb_unregister_client) },
+-	{ 0xefd6cf06, __VMLINUX_SYMBOL_STR(__aeabi_unwind_cpp_pr0) },
+-	{ 0xc0fa0d21, __VMLINUX_SYMBOL_STR(queue_work_on) },
+-	{ 0x5965fdfb, __VMLINUX_SYMBOL_STR(try_module_get) },
+-	{ 0x1fd09355, __VMLINUX_SYMBOL_STR(fb_blank) },
+-};
+-
+-static const char __module_depends[]
+-__used
+-__attribute__((section(".modinfo"))) =
+-"depends=pvrsrvkm";
+-
+-
+-MODULE_INFO(srcversion, "9D789311ACD38C9A6368FFC");
+diff --git a/services4/3rdparty/dc_ti43xx_linux/omaplfb_displayclass.c b/services4/3rdparty/dc_ti43xx_linux/omaplfb_displayclass.c
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti43xx_linux/omaplfb_linux.c b/services4/3rdparty/dc_ti43xx_linux/omaplfb_linux.c
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti81xx_linux/Kbuild b/services4/3rdparty/dc_ti81xx_linux/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/3rdparty/dc_ti81xx_linux/omaplfb.mod.c b/services4/3rdparty/dc_ti81xx_linux/omaplfb.mod.c
+deleted file mode 100644
+index 9f00d98..0000000
+--- a/services4/3rdparty/dc_ti81xx_linux/omaplfb.mod.c
++++ /dev/null
+@@ -1,59 +0,0 @@
+-#include <linux/module.h>
+-#include <linux/vermagic.h>
+-#include <linux/compiler.h>
+-
+-MODULE_INFO(vermagic, VERMAGIC_STRING);
+-
+-struct module __this_module
+-__attribute__((section(".gnu.linkonce.this_module"))) = {
+- .name = KBUILD_MODNAME,
+- .init = init_module,
+-#ifdef CONFIG_MODULE_UNLOAD
+- .exit = cleanup_module,
+-#endif
+- .arch = MODULE_ARCH_INIT,
+-};
+-
+-static const struct modversion_info ____versions[]
+-__used
+-__attribute__((section("__versions"))) = {
+-	{ 0x9e03639, "module_layout" },
+-	{ 0x12da5bb2, "__kmalloc" },
+-	{ 0x5934392b, "fb_register_client" },
+-	{ 0xe5c361b5, "__alloc_workqueue_key" },
+-	{ 0x9eaebd62, "fb_pan_display" },
+-	{ 0xf7802486, "__aeabi_uidivmod" },
+-	{ 0x938917cf, "queue_work" },
+-	{ 0x62b72b0d, "mutex_unlock" },
+-	{ 0x4a13d075, "PVRGetDisplayClassJTable" },
+-	{ 0xe2d5255a, "strcmp" },
+-	{ 0xe707d823, "__aeabi_uidiv" },
+-	{ 0xfa2a45e, "__memzero" },
+-	{ 0x5f754e5a, "memset" },
+-	{ 0xdc798d37, "__mutex_init" },
+-	{ 0xea147363, "printk" },
+-	{ 0xec6a4d04, "wait_for_completion_interruptible" },
+-	{ 0x328a05f1, "strncpy" },
+-	{ 0x16305289, "warn_slowpath_null" },
+-	{ 0xe16b893b, "mutex_lock" },
+-	{ 0x46e3ab51, "destroy_workqueue" },
+-	{ 0x5981938a, "module_put" },
+-	{ 0x434fa55c, "release_console_sem" },
+-	{ 0xf174ed48, "acquire_console_sem" },
+-	{ 0x9e01d61c, "registered_fb" },
+-	{ 0xc27487dd, "__bug" },
+-	{ 0xef677c9, "fb_set_var" },
+-	{ 0x69a5a489, "vps_grpx_unregister_isr" },
+-	{ 0x37a0cba, "kfree" },
+-	{ 0x9d669763, "memcpy" },
+-	{ 0x394e59, "vps_grpx_register_isr" },
+-	{ 0xcc36f32e, "fb_unregister_client" },
+-	{ 0x60f71cfa, "complete" },
+-	{ 0x4883388b, "fb_blank" },
+-};
+-
+-static const char __module_depends[]
+-__used
+-__attribute__((section(".modinfo"))) =
+-"depends=pvrsrvkm,vpss";
+-
+diff --git a/services4/3rdparty/linux_drm/Kbuild b/services4/3rdparty/linux_drm/Kbuild
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/oemfuncs.h b/services4/system/ti43xx/oemfuncs.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/sysconfig.c b/services4/system/ti43xx/sysconfig.c
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/sysconfig.h b/services4/system/ti43xx/sysconfig.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/sysinfo.h b/services4/system/ti43xx/sysinfo.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/syslocal.h b/services4/system/ti43xx/syslocal.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/sysutils.c b/services4/system/ti43xx/sysutils.c
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti43xx/sysutils_linux.c b/services4/system/ti43xx/sysutils_linux.c
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/oemfuncs.h b/services4/system/ti81xx/oemfuncs.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/sysconfig.c b/services4/system/ti81xx/sysconfig.c
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/sysconfig.h b/services4/system/ti81xx/sysconfig.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/sysinfo.h b/services4/system/ti81xx/sysinfo.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/syslocal.h b/services4/system/ti81xx/syslocal.h
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/sysutils.c b/services4/system/ti81xx/sysutils.c
+old mode 100755
+new mode 100644
+diff --git a/services4/system/ti81xx/sysutils_linux.c b/services4/system/ti81xx/sysutils_linux.c
+old mode 100755
+new mode 100644
+-- 
+1.8.3.2
+

@@ -1,0 +1,44 @@
+From e867390a84b3df794b3148de11abf914c521ceec Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 2 Jun 2014 16:29:34 -0700
+Subject: [PATCH 07/14] Remove unused variables causing warnings
+
+Just a little spring cleaning for compiler warnings.  In some cases,
+variables need to be defined conditionally according to the
+preprocessor macros for the code that makes use of them.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/srvkm/env/linux/module.c       | 2 ++
+ services4/system/ti335x/sysutils_linux.c | 1 -
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/services4/srvkm/env/linux/module.c b/services4/srvkm/env/linux/module.c
+index e03dc00..f271479 100644
+--- a/services4/srvkm/env/linux/module.c
++++ b/services4/srvkm/env/linux/module.c
+@@ -388,7 +388,9 @@ static int __devinit PVRSRVDriverProbe(LDM_DEV *pDevice, const struct pci_device
+ #endif
+ {
+ 	SYS_DATA *psSysData;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
+ 	int ret;	
++#endif
+ 	PVR_TRACE(("PVRSRVDriverProbe(pDevice=%p)", pDevice));
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
+ 	rstc = reset_control_get(&pDevice->dev, NULL);
+diff --git a/services4/system/ti335x/sysutils_linux.c b/services4/system/ti335x/sysutils_linux.c
+index 9f4d369..b62dcc4 100644
+--- a/services4/system/ti335x/sysutils_linux.c
++++ b/services4/system/ti335x/sysutils_linux.c
+@@ -192,7 +192,6 @@ PVRSRV_ERROR EnableSGXClocks(SYS_DATA *psSysData)
+         IMG_INT res;
+         long lRate,lNewRate;
+ #endif
+-	int ret;
+ 	/* SGX clocks already enabled? */
+ 	if (atomic_read(&psSysSpecData->sSGXClocksEnabled) != 0)
+ 	{
+-- 
+1.8.3.2
+

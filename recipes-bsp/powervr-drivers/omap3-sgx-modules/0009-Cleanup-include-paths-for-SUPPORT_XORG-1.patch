@@ -1,0 +1,59 @@
+From a6c5b7c2310ffb4a2c0dfcbaec99fe94717370a2 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 5 Jun 2014 10:04:41 -0700
+Subject: [PATCH 09/14] Cleanup include paths for SUPPORT_XORG=1
+
+At this point, a command like this compiles (some platforms have link
+errors though) against a 3.15-RC6 kernel:
+ $ SUPPORT_XORG=1 KERNELDIR=/home/ash/Gumstix/Linux/ TI_PLATFORM= <x> \
+   ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+
+where <x> is 'omap3', 'omap3630', 'ti335x', 'ti43xx', 'omap4'.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/3rdparty/dc_ti335x_linux/Kbuild | 1 +
+ services4/3rdparty/dc_ti43xx_linux/Kbuild | 1 +
+ services4/srvkm/env/linux/pvr_drm.h       | 2 --
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services4/3rdparty/dc_ti335x_linux/Kbuild b/services4/3rdparty/dc_ti335x_linux/Kbuild
+index 9e0c843..bab3561 100644
+--- a/services4/3rdparty/dc_ti335x_linux/Kbuild
++++ b/services4/3rdparty/dc_ti335x_linux/Kbuild
+@@ -14,6 +14,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/include4 \
+ 		-I$(PVR_BUILD_DIR)/services4/include \
+ 		-I$(PVR_BUILD_DIR)/services4/system/$(PVR_SYSTEM) \
++		-I$(PVR_BUILD_DIR)/services4/srvkm/env/linux \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
+ 		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Kbuild b/services4/3rdparty/dc_ti43xx_linux/Kbuild
+index 9e0c843..bab3561 100644
+--- a/services4/3rdparty/dc_ti43xx_linux/Kbuild
++++ b/services4/3rdparty/dc_ti43xx_linux/Kbuild
+@@ -14,6 +14,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/include4 \
+ 		-I$(PVR_BUILD_DIR)/services4/include \
+ 		-I$(PVR_BUILD_DIR)/services4/system/$(PVR_SYSTEM) \
++		-I$(PVR_BUILD_DIR)/services4/srvkm/env/linux \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
+ 		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+diff --git a/services4/srvkm/env/linux/pvr_drm.h b/services4/srvkm/env/linux/pvr_drm.h
+index 62488d0..65f5d59 100644
+--- a/services4/srvkm/env/linux/pvr_drm.h
++++ b/services4/srvkm/env/linux/pvr_drm.h
+@@ -42,8 +42,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ #if !defined(__PVR_DRM_H__)
+ #define __PVR_DRM_H__
+ 
+-#include "pvr_drm_shared.h"
+-
+ #if defined(SUPPORT_DRI_DRM)
+ #define	PVR_DRM_MAKENAME_HELPER(x, y) x ## y
+ #define	PVR_DRM_MAKENAME(x, y) PVR_DRM_MAKENAME_HELPER(x, y)
+-- 
+1.8.3.2
+

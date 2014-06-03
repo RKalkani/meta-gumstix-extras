@@ -1,0 +1,39 @@
+From 110b2c46e4fdc8a966421418c2d461b9c1c61800 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 2 Jun 2014 18:54:31 -0700
+Subject: [PATCH 06/14] Adapt OMAP_DSS_MANAGER for 3.12.2+ kernels
+
+We adapt the OMAP_DSS_MANAGER macro for this kernel commit present
+in kernels from 3.12.2+.
+
+commit a73fdc647417699833f22d0f239affe22e062827
+Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Date:   Wed Jul 24 13:01:34 2013 +0300
+
+    OMAPDSS: rename omap_dss_device's 'output' to 'src'
+...
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c b/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
+index 17bf181..9a7baff 100644
+--- a/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
++++ b/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
+@@ -176,8 +176,10 @@ MODULE_SUPPORTED_DEVICE(DEVNAME);
+ #define OMAP_DSS_DRIVER(drv, dev) struct omap_dss_driver *drv = (dev) != NULL ? (dev)->driver : NULL
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
+ #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->manager : NULL
+-#else
++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,12,2))
+ #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->output->manager : NULL
++#else
++#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->src->manager : NULL
+ #endif
+ 
+ #define	WAIT_FOR_VSYNC(man)	((man)->wait_for_vsync)
+-- 
+1.8.3.2
+

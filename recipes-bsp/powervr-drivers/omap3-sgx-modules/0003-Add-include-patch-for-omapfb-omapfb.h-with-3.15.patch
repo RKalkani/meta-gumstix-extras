@@ -1,0 +1,120 @@
+From 069196e767146b52ff134b6990e5da650884efe3 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 2 Jun 2014 15:37:45 -0700
+Subject: [PATCH 03/14] Add include patch for omapfb/omapfb.h with 3.15+
+
+For kernel of version 3.15+, the omafb/omapfb.h header is located at
+'drivers/video/fbdev/omap2' rather than 'drivers/video/omap2'. To be
+compatible with pre-3.15 kernels, we just add this additional path.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/3rdparty/dc_omapfb3_linux/Kbuild    | 1 +
+ services4/3rdparty/dc_omapfb3_linux/Kbuild.mk | 1 +
+ services4/3rdparty/dc_ti335x_linux/Kbuild     | 1 +
+ services4/3rdparty/dc_ti335x_linux/Kbuild.mk  | 1 +
+ services4/3rdparty/dc_ti43xx_linux/Kbuild     | 1 +
+ services4/3rdparty/dc_ti43xx_linux/Kbuild.mk  | 1 +
+ services4/3rdparty/dc_ti81xx_linux/Kbuild     | 1 +
+ services4/3rdparty/dc_ti81xx_linux/Kbuild.mk  | 1 +
+ 8 files changed, 8 insertions(+)
+
+diff --git a/services4/3rdparty/dc_omapfb3_linux/Kbuild b/services4/3rdparty/dc_omapfb3_linux/Kbuild
+index c610eee..35d0659 100644
+--- a/services4/3rdparty/dc_omapfb3_linux/Kbuild
++++ b/services4/3rdparty/dc_omapfb3_linux/Kbuild
+@@ -17,6 +17,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/services4/include/env/linux \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
++		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(KERNELDIR)/arch/arm/plat-omap/include \
+ 		$(SYS_CFLAGS.1) \
+ 
+diff --git a/services4/3rdparty/dc_omapfb3_linux/Kbuild.mk b/services4/3rdparty/dc_omapfb3_linux/Kbuild.mk
+index d442f79..01eb220 100644
+--- a/services4/3rdparty/dc_omapfb3_linux/Kbuild.mk
++++ b/services4/3rdparty/dc_omapfb3_linux/Kbuild.mk
+@@ -41,6 +41,7 @@
+ ccflags-y += \
+ 	-I$(TOP)/services4/3rdparty/dc_omapfb3_linux \
+ 	-Idrivers/video/omap2 \
++	-Idrivers/video/fbdev/omap2 \
+ 	-Iarch/arm/plat-omap/include
+ 
+ omaplfb-y += \
+diff --git a/services4/3rdparty/dc_ti335x_linux/Kbuild b/services4/3rdparty/dc_ti335x_linux/Kbuild
+index 1ae2359..9e0c843 100644
+--- a/services4/3rdparty/dc_ti335x_linux/Kbuild
++++ b/services4/3rdparty/dc_ti335x_linux/Kbuild
+@@ -15,6 +15,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/services4/include \
+ 		-I$(PVR_BUILD_DIR)/services4/system/$(PVR_SYSTEM) \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
++		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+ 		$(SYS_CFLAGS.1) \
+ 
+diff --git a/services4/3rdparty/dc_ti335x_linux/Kbuild.mk b/services4/3rdparty/dc_ti335x_linux/Kbuild.mk
+index d442f79..01eb220 100644
+--- a/services4/3rdparty/dc_ti335x_linux/Kbuild.mk
++++ b/services4/3rdparty/dc_ti335x_linux/Kbuild.mk
+@@ -41,6 +41,7 @@
+ ccflags-y += \
+ 	-I$(TOP)/services4/3rdparty/dc_omapfb3_linux \
+ 	-Idrivers/video/omap2 \
++	-Idrivers/video/fbdev/omap2 \
+ 	-Iarch/arm/plat-omap/include
+ 
+ omaplfb-y += \
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Kbuild b/services4/3rdparty/dc_ti43xx_linux/Kbuild
+index 1ae2359..9e0c843 100644
+--- a/services4/3rdparty/dc_ti43xx_linux/Kbuild
++++ b/services4/3rdparty/dc_ti43xx_linux/Kbuild
+@@ -15,6 +15,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/services4/include \
+ 		-I$(PVR_BUILD_DIR)/services4/system/$(PVR_SYSTEM) \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
++		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+ 		$(SYS_CFLAGS.1) \
+ 
+diff --git a/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk b/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk
+index d442f79..01eb220 100644
+--- a/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk
++++ b/services4/3rdparty/dc_ti43xx_linux/Kbuild.mk
+@@ -41,6 +41,7 @@
+ ccflags-y += \
+ 	-I$(TOP)/services4/3rdparty/dc_omapfb3_linux \
+ 	-Idrivers/video/omap2 \
++	-Idrivers/video/fbdev/omap2 \
+ 	-Iarch/arm/plat-omap/include
+ 
+ omaplfb-y += \
+diff --git a/services4/3rdparty/dc_ti81xx_linux/Kbuild b/services4/3rdparty/dc_ti81xx_linux/Kbuild
+index 1ae2359..9e0c843 100644
+--- a/services4/3rdparty/dc_ti81xx_linux/Kbuild
++++ b/services4/3rdparty/dc_ti81xx_linux/Kbuild
+@@ -15,6 +15,7 @@ EXTRA_CFLAGS =	-DLINUX \
+ 		-I$(PVR_BUILD_DIR)/services4/include \
+ 		-I$(PVR_BUILD_DIR)/services4/system/$(PVR_SYSTEM) \
+ 		-I$(KERNELDIR)/drivers/video/omap2 \
++		-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 		-I$(PVR_BUILD_DIR)/services4/system/include \
+ 		$(SYS_CFLAGS.1) \
+ 
+diff --git a/services4/3rdparty/dc_ti81xx_linux/Kbuild.mk b/services4/3rdparty/dc_ti81xx_linux/Kbuild.mk
+index eca9351..565e140 100644
+--- a/services4/3rdparty/dc_ti81xx_linux/Kbuild.mk
++++ b/services4/3rdparty/dc_ti81xx_linux/Kbuild.mk
+@@ -42,6 +42,7 @@
+ ccflags-y += \
+ 	-I$(TOP)/services4/3rdparty/dc_omapfb3_linux \
+ 	-I$(KERNELDIR)/drivers/video/omap2 \
++	-I$(KERNELDIR)/drivers/video/fbdev/omap2 \
+ 	-I$(KERNELDIR)/arch/arm/plat-omap/include
+ 
+ omaplfb-y += \
+-- 
+1.8.3.2
+

@@ -1,0 +1,86 @@
+From 4d2a490c19b93bf22b382597443b69124c0b3611 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Mon, 2 Jun 2014 15:57:35 -0700
+Subject: [PATCH 04/14] Disable use of vsync_callback_t
+
+The omaplfb_linux.c file makes use of vsync_callback_t type found in
+drivers/video/da8xx-fb.c in some kernels.  It looks like this
+definition never made it upstream and reports [1] suggest that it is
+not strictly needed.
+
+I removed this for both ti335x and ti81xx but I have no proof that this
+works.
+
+[1] https://groups.google.com/forum/#!topic/beagleboard/YCR42p2_xXU
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/3rdparty/dc_ti335x_linux/omaplfb_linux.c | 14 --------------
+ services4/3rdparty/dc_ti81xx_linux/omaplfb_linux.c | 15 ---------------
+ 2 files changed, 29 deletions(-)
+
+diff --git a/services4/3rdparty/dc_ti335x_linux/omaplfb_linux.c b/services4/3rdparty/dc_ti335x_linux/omaplfb_linux.c
+index 5c3fc48..16923be 100644
+--- a/services4/3rdparty/dc_ti335x_linux/omaplfb_linux.c
++++ b/services4/3rdparty/dc_ti335x_linux/omaplfb_linux.c
+@@ -698,26 +698,12 @@ OMAPLFB_BOOL OMAPLFBWaitForVSync(OMAPLFB_DEVINFO *psDevInfo)
+ 	return OMAPLFB_TRUE;
+ #endif	/* defined(PVR_OMAPLFB_DRM_FB) */
+ #if FBDEV_PRESENT
+-      int r;
+-
+       void grpx_irq_wait_handler(void *data)
+       {
+         if (data != NULL)
+         complete((struct completion *)data);
+       }
+       DECLARE_COMPLETION_ONSTACK(completion);
+-
+-      if (register_vsync_cb((vsync_callback_t)grpx_irq_wait_handler, &completion, psDevInfo->uiFBDevID) != 0)
+-      {
+-          printk (KERN_WARNING DRIVER_PREFIX ": Failed to register for vsync call back\n");
+-          return OMAPLFB_FALSE;
+-      }
+-      r = wait_for_completion_interruptible(&completion);
+-      if (unregister_vsync_cb((vsync_callback_t)grpx_irq_wait_handler , &completion, psDevInfo->uiFBDevID) != 0)
+-      {
+-          printk (KERN_WARNING DRIVER_PREFIX ": Failed to un-register for vsync call back\n");
+-          return OMAPLFB_FALSE;
+-      }
+ #endif
+       return OMAPLFB_TRUE;
+ 
+diff --git a/services4/3rdparty/dc_ti81xx_linux/omaplfb_linux.c b/services4/3rdparty/dc_ti81xx_linux/omaplfb_linux.c
+index 3ce0060..c9681ba 100644
+--- a/services4/3rdparty/dc_ti81xx_linux/omaplfb_linux.c
++++ b/services4/3rdparty/dc_ti81xx_linux/omaplfb_linux.c
+@@ -760,26 +760,11 @@ OMAPLFB_BOOL OMAPLFBWaitForVSync(OMAPLFB_DEVINFO *psDevInfo)
+ #endif
+ 
+ #if FBDEV_PRESENT
+-      int r;
+-
+       void grpx_irq_wait_handler(void *data)
+       {
+           complete((struct completion *)data);
+       }
+       DECLARE_COMPLETION_ONSTACK(completion);
+-
+-      if (vps_grpx_register_isr ((vsync_callback_t)grpx_irq_wait_handler, &completion, psDevInfo->uiFBDevID) != 0)
+-      {
+-          printk (KERN_WARNING DRIVER_PREFIX ": Failed to register for vsync call back\n");
+-          return OMAPLFB_FALSE;
+-      }
+-//    timeout = wait_for_completion_interruptible_timeout(&completion, timeout);
+-      r = wait_for_completion_interruptible(&completion);
+-      if (vps_grpx_unregister_isr((vsync_callback_t)grpx_irq_wait_handler , &completion, psDevInfo->uiFBDevID) != 0)
+-      {
+-          printk (KERN_WARNING DRIVER_PREFIX ": Failed to un-register for vsync call back\n");
+-          return OMAPLFB_FALSE;
+-      }
+ #endif
+ 
+       return OMAPLFB_TRUE;
+-- 
+1.8.3.2
+

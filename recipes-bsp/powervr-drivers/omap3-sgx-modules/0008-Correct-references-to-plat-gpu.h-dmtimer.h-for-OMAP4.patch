@@ -1,0 +1,43 @@
+From 53f50b51305a2e8c78dce6ddf83e64e615fc4256 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 5 Jun 2014 16:56:41 -0700
+Subject: [PATCH 08/14] Correct references to plat/(gpu.h,dmtimer.h) for OMAP4
+
+The dmtimer.h header file is in the plat-omap directory. I can't find
+a record of gpu.h in a mainline kernel and other platforms have already
+commented out the gpu.h header so I'll assume this is safe.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ Kbuild                            | 1 +
+ services4/system/omap4/syslocal.h | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Kbuild b/Kbuild
+index 46c0e94..130d86a 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -82,6 +82,7 @@ EXTRA_CFLAGS += -I$(src)/services4/system/include
+ EXTRA_CFLAGS += -I$(src)/services4/system/$(TI_PLATFORM)
+ EXTRA_CFLAGS += -I$(src)/services4/srvkm/bridged/sgx
+ EXTRA_CFLAGS += -I$(KERNELDIR)/arch/arm/mach-omap2
++EXTRA_CFLAGS += -I$(KERNELDIR)/arch/arm/plat-omap/include
+ 
+ 
+ EXTRA_CFLAGS += $(ALL_CFLAGS)
+diff --git a/services4/system/omap4/syslocal.h b/services4/system/omap4/syslocal.h
+index 21e9675..a2e8300 100644
+--- a/services4/system/omap4/syslocal.h
++++ b/services4/system/omap4/syslocal.h
+@@ -84,7 +84,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ #endif
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
+-#include <plat/gpu.h>
++//#include <plat/gpu.h>
+ #if !defined(PVR_NO_OMAP_TIMER)
+ #define	PVR_OMAP_USE_DM_TIMER_API
+ #include <plat/dmtimer.h>
+-- 
+1.8.3.2
+

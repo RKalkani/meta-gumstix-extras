@@ -1,0 +1,32 @@
+From b7951faebe07c5e674c1a7cdf17f58120699c9e9 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Wed, 4 Jun 2014 12:29:37 -0700
+Subject: [PATCH 11/14] Get rid of reference to asm/system.h
+
+As per kernel commit:
+  commit 74c4137b2a9c73e7e6887ea1bac93d7012827012
+  Author: David Howells <dhowells@redhat.com>
+  Date:   Mon Feb 24 16:48:26 2014 +0100
+this is no longer used and has been broken down into chunks.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ services4/3rdparty/linux_drm/pvr_drm_stubs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services4/3rdparty/linux_drm/pvr_drm_stubs.c b/services4/3rdparty/linux_drm/pvr_drm_stubs.c
+index b78fd18..26a7ff6 100644
+--- a/services4/3rdparty/linux_drm/pvr_drm_stubs.c
++++ b/services4/3rdparty/linux_drm/pvr_drm_stubs.c
+@@ -49,7 +49,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+-#include <asm/system.h>
++//#include <asm/system.h>
+ 
+ #include "pvr_drm_mod.h"
+ 
+-- 
+1.8.3.2
+

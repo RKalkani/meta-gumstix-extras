@@ -1,0 +1,32 @@
+From c9ade72f9d55d8681695609ba0d7795c4fb70c69 Mon Sep 17 00:00:00 2001
+From: Ash Charles <ashcharles@gmail.com>
+Date: Thu, 5 Jun 2014 10:08:21 -0700
+Subject: [PATCH 10/14] Assume TI_PLATFORM='omap3' means OMAPES=3.x.
+
+For people with pre-121 SGX core revs., this may cause problems. For
+now, it makes the command to build consistent across platforms.
+
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+---
+ Makefile | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3e89989..662625e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,11 +46,7 @@ ifeq ($(TI_PLATFORM),omap3630)
+ CORE = -DSGX530 -DSUPPORT_SGX530 -DSGX_CORE_REV=125
+ else
+ ifeq ($(TI_PLATFORM),omap3)
+-ifeq ($(OMAPES),3.x)
+ CORE = -DSGX530 -DSUPPORT_SGX530 -DSGX_CORE_REV=121
+-else
+-CORE = -DSGX530 -DSUPPORT_SGX530 -DSGX_CORE_REV=103
+-endif
+ endif
+ endif
+ endif
+-- 
+1.8.3.2
+
